@@ -22,4 +22,4 @@ docker run -d -it \
 ${IMAGE}
 
 # Jump into docker container.
-docker exec -ti beergarden bash
+docker exec -u 0 -ti beergarden bash
