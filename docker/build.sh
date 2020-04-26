@@ -8,15 +8,25 @@ IMAGE="beergarden"
 CONTAINER_NAME="beergarden"
 UI_IMAGE="beergarden_ui"
 UI_CONTAINER_NAME="beergarden_ui"
+GO_IMAGE="beergarden_go"
+GO_CONTAINER_NAME="beergarden_go"
 VERSION="1"
 
 # Remove old container if it exists.
 docker rm -f ${CONTAINER_NAME} > /dev/null 2>&1 && echo 'removed container' || echo 'nothing to remove'
 docker rm -f ${UI_CONTAINER_NAME} > /dev/null 2>&1 && echo 'removed container' || echo 'nothing to remove'
+docker rm -f ${GO_CONTAINER_NAME} > /dev/null 2>&1 && echo 'removed container' || echo 'nothing to remove'
 
 # Build image if necessary.
 docker build -t ${IMAGE} .
 docker build -t ${UI_IMAGE} ui/
+docker build -t ${GO_IMAGE} ../api
+
+# Build GO
+docker run -it \
+--name=${GO_CONTAINER_NAME} \
+-v $(pwd)/../api:/app:cached \
+${GO_IMAGE}
 
 # Build UI
 docker run --rm -it \
@@ -34,6 +44,7 @@ docker run -d -it \
 ${IMAGE}
 
 docker exec -u 0 -ti beergarden bash -c 'cp /beergarden/docker/nginx.conf /etc/nginx/; /etc/init.d/nginx start'
+docker exec -u 0 -ti beergarden bash -c 'alias go=/usr/local/go/bin/go; export GOROOT=/usr/local/go/bin/ >> ~/.bashrc; export GOPATH=/usr/local/go >> ~/.bashrc; cd /beergarden/api; /usr/local/go/bin/go get .'
 
 # Jump into docker container.
 docker exec -ti beergarden bash

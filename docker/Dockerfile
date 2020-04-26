@@ -11,13 +11,24 @@ RUN echo "deb http://apt.postgresql.org/pub/repos/apt/ precise-pgdg main" > /etc
 # Install ``python-software-properties``, ``software-properties-common`` and PostgreSQL 9.5
 #  There are some warnings (in red) that show up during the build. You can hide
 #  them by prefixing each apt-get statement with DEBIAN_FRONTEND=noninteractive
-RUN apt-get update && apt-get install -y python-software-properties software-properties-common postgresql-9.5 postgresql-client-9.5 postgresql-contrib-9.5 golang npm nginx
+RUN apt-get update && apt-get install -y python-software-properties software-properties-common postgresql-9.5 postgresql-client-9.5 postgresql-contrib-9.5 npm nginx git wget
+
+#RUN apt-get remove golang --purge
+#RUN cd /tmp; wget -q https://storage.googleapis.com/golang/go1.7.3.linux-amd64.tar.gz
+#RUN tar -zxvf /tmp/go1.7.*.linux-amd64.tar.gz -C /usr/local
+
+#RUN echo 'alias go=/usr/local/go/bin/go'
+#RUN echo 'export GOROOT=/usr/local/go/bin/' >> ~/.bashrc
+#RUN echo 'export GOPATH=/usr/local/go' >> ~/.bashrc
+#RUN echo 'export PATH=$PATH:$GOROOT/bin:$GOPATH/bin' >> ~/.bashrc
+#RUN echo 'source ~/.bashrc'
 
 # Note: The official Debian and Ubuntu images automatically ``apt-get clean``
 # after each ``apt-get``
 
 # Run the rest of the commands as the ``postgres`` user created by the ``postgres-9.5`` package when it was ``apt-get installed``
 USER postgres
+RUN echo 'alias go=/usr/local/go/bin/go'
 
 # Create a PostgreSQL role named ``docker`` with ``docker`` as the password and
 # then create a database `docker` owned by the ``docker`` role.
