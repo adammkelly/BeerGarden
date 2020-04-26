@@ -5,7 +5,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/adammkelly/BeerGarden/endpoints"
+	"github.com/adammkelly/BeerGarden/api/endpoints"
 	"github.com/gorilla/mux"
 )
 
