@@ -23,10 +23,11 @@ docker build -t ${UI_IMAGE} ui/
 docker build -t ${GO_IMAGE} ../api
 
 # Build GO
-docker run -it \
+docker run --rm -it \
 --name=${GO_CONTAINER_NAME} \
 -v $(pwd)/../api:/app:cached \
 ${GO_IMAGE}
+#docker rm -f ${GO_CONTAINER_NAME}
 
 # Build UI
 docker run --rm -it \
@@ -39,12 +40,12 @@ ${UI_IMAGE}
 docker run -d -it \
 -e VERSION=$VERSION \
 -p 80:80  \
+-p 8080:8080  \
 --name=${CONTAINER_NAME} \
 -v $(pwd)/..:/beergarden:cached \
 ${IMAGE}
 
 docker exec -u 0 -ti beergarden bash -c 'cp /beergarden/docker/nginx.conf /etc/nginx/; /etc/init.d/nginx start'
-docker exec -u 0 -ti beergarden bash -c 'alias go=/usr/local/go/bin/go; export GOROOT=/usr/local/go/bin/ >> ~/.bashrc; export GOPATH=/usr/local/go >> ~/.bashrc; cd /beergarden/api; /usr/local/go/bin/go get .'
 
 # Jump into docker container.
 docker exec -ti beergarden bash
