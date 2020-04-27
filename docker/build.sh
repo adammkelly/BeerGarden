@@ -46,6 +46,7 @@ docker run -d -it \
 ${IMAGE}
 
 docker exec -u 0 -ti beergarden bash -c 'cp /beergarden/docker/nginx.conf /etc/nginx/; /etc/init.d/nginx start'
+docker exec -ti beergarden bash -c '/beergarden/docker/entry.sh'
 
 # Jump into docker container.
 docker exec -ti beergarden bash

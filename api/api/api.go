@@ -57,6 +57,7 @@ func Run() {
 	a.Router = mux.NewRouter()
 	a.Get("/", homeLink)
 	a.Get("/beers", a.handleRequest(endpoints.GetBeers))
+	a.Get("/beers/random", a.handleRequest(endpoints.GetBeersRandom))
 	a.Run(":8080")
 }
 
